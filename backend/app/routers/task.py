@@ -10,6 +10,8 @@ from app.models.task import Task
 from app.schemas.task import TaskCreate, TaskResponse
 from app.schemas.task import TaskUpdate
 from datetime import datetime
+from app.schemas.task import AttachDocuments
+from app.models.document import Document
 
 router = APIRouter(
     prefix="/tasks",
@@ -177,3 +179,33 @@ def complete_task(
     db.refresh(task)
 
     return task
+
+@router.post("/{task_id}/documents")
+def attach_documents(
+    task_id: int,
+    request: AttachDocuments,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+
+    task = db.query(Task).filter(
+        Task.id == task_id
+    ).first()
+
+    if not task:
+        raise HTTPException(
+            status_code=404,
+            detail="Task not found."
+        )
+
+    documents = db.query(Document).filter(
+        Document.id.in_(request.document_ids)
+    ).all()
+
+    task.documents.extend(documents)
+
+    db.commit()
+
+    return {
+        "message": "Documents linked successfully."
+    }

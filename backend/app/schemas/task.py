@@ -34,3 +34,6 @@ class TaskResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class AttachDocuments(BaseModel):
+    document_ids: list[int]

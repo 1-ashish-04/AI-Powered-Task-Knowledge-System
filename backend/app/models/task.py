@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 
 from app.database import Base
-
+from app.models.task_document import task_documents
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -62,3 +62,9 @@ class Task(Base):
         foreign_keys=[created_by],
         back_populates="created_tasks"
     )
+
+    documents = relationship(
+    "Document",
+    secondary=task_documents,
+    back_populates="tasks"
+)
