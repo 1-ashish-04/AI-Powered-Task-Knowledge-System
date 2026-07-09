@@ -14,6 +14,21 @@ class Task(Base):
 
     description = Column(Text)
 
+    priority = Column(
+        String(20),
+        default="Medium"
+    )
+
+    status = Column(
+        String(20),
+        default="Pending"
+    )
+
+    deadline = Column(
+        DateTime,
+        nullable=True
+    )
+
     assigned_to = Column(
         Integer,
         ForeignKey("users.id"),
@@ -24,11 +39,6 @@ class Task(Base):
         Integer,
         ForeignKey("users.id"),
         nullable=False
-    )
-
-    status = Column(
-        String(20),
-        default="Pending"
     )
 
     created_at = Column(

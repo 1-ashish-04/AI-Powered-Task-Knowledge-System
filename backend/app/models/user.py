@@ -42,4 +42,4 @@ class User(Base):
     activities = relationship(
         "ActivityLog",
         back_populates="user"
-    )
+    ) 
